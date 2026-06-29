@@ -1,0 +1,14 @@
+{
+  "name": "notouch-web-handout",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc && node dist/notouch.js",
+    "clean": "node dist/notouch.js --clean",
+    "serve": "python3 -m http.server 4173 --directory public"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
