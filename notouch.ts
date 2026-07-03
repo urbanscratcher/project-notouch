@@ -18,6 +18,20 @@ const POSTS_DIR = path.join(ROOT, "posts");
 const PUBLIC_DIR = path.join(ROOT, "public");
 const FILE_NAME_PATTERN = /^(\d{4}-\d{2}-\d{2})-(.+)\.md$/;
 const DEFAULT_QUESTION = "이 주제는 내 작업에서 어떤 질문으로 이어질 수 있을까?";
+const BASE_PATH = normalizeBasePath(process.env.SITE_BASE_PATH || "");
+
+function normalizeBasePath(value: string): string {
+  const trimmed = value.trim().replace(/\/+$/, "");
+  if (!trimmed || trimmed === "/") return "";
+
+  return trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+}
+
+function sitePath(value: string): string {
+  const normalized = value.startsWith("/") ? value : `/${value}`;
+
+  return `${BASE_PATH}${normalized}`;
+}
 
 function escapeHtml(value: string): string {
   return value
@@ -233,7 +247,7 @@ function parsePost(fileName: string, index: number): Post | null {
   const html = markdownToHtml(contentBody);
   const summary = data.summary || extractFirstParagraph(contentBody) || "TouchDesigner를 매개로 이미지와 시스템을 관찰하는 짧은 글입니다.";
   const question = data.question || DEFAULT_QUESTION;
-  const urlPath = `/posts/${stem}/`;
+  const urlPath = sitePath(`/posts/${stem}/`);
   const outputPath = path.join(PUBLIC_DIR, "posts", stem, "index.html");
   const number = String(index + 1).padStart(2, "0");
 
@@ -247,7 +261,7 @@ function renderPage(title: string, body: string): string {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${escapeHtml(title)}</title>
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="${sitePath("/styles.css")}">
 </head>
 <body>
   <main>
@@ -298,7 +312,7 @@ function renderPost(post: Post, previous?: Post, next?: Post): string {
     post.title,
     `    <article class="post handout-sheet">
       <nav class="top-nav">
-        <a href="/">목록으로 돌아가기</a>
+        <a href="${sitePath("/")}">목록으로 돌아가기</a>
       </nav>
       <header class="post-header">
         <span class="post-number">${post.number}</span>
