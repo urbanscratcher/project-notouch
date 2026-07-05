@@ -273,6 +273,7 @@ ${body}
 }
 
 function renderIndex(posts: Post[]): string {
+  const topicCount = posts.length;
   const cards = posts
     .map(
       (post) => `        <article class="topic-card">
@@ -292,9 +293,9 @@ function renderIndex(posts: Post[]): string {
     `    <section class="handout-hero">
       <p class="kicker">TouchDesigner Study</p>
       <h1>NoTouch.py Study Handout</h1>
-      <p>TouchDesigner를 매개로 이미지, 시스템, 감각, 도구에 대해 생각하는 12개의 글</p>
+      <p>TouchDesigner를 매개로 이미지, 시스템, 감각, 도구에 대해 생각하는 ${topicCount}개의 글</p>
     </section>
-    <section class="topic-grid" aria-label="12개 주제">
+    <section class="topic-grid" aria-label="${topicCount}개 주제">
 ${cards || '      <p class="empty">아직 등록된 글이 없습니다.</p>'}
     </section>`,
   );
